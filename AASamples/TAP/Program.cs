@@ -8,13 +8,13 @@
         static void Main(string[] args)
         {
             var program = new Program();
-            program.DumpWebPage();
+            program.DumpWebPageAsync();
 
             Console.WriteLine("Waiting for response...{0}", Environment.NewLine);
             Console.ReadKey();
         }
 
-        private async void DumpWebPage()
+        private async void DumpWebPageAsync()
         {
             var client = new WebClient();
 
