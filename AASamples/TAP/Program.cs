@@ -1,29 +1,55 @@
 ﻿namespace TAP
 {
     using System;
-    using System.Net;
+    using System.Threading.Tasks;
 
     class Program
     {
         static void Main(string[] args)
         {
-            var program = new Program();
-            program.DumpWebPageAsync();
+            // 179426549
+            Console.WriteLine("Please enter a valid number:");
+            var numberIn = Console.ReadLine();
+            long number;
 
-            Console.WriteLine("Waiting for response...{0}", Environment.NewLine);
+            while (!Int64.TryParse(numberIn, out number))
+            {
+                Console.WriteLine("Not a valid number - please enter again:");
+                numberIn = Console.ReadLine();
+            }
+            
+            var program = new Program();
+            program.DetermineIfIsPrimeNumberAsync(number);
+
+            Console.WriteLine("Calculating if is prime number...{0}", Environment.NewLine);
             Console.ReadKey();
         }
 
-        private async void DumpWebPageAsync()
+        private async void DetermineIfIsPrimeNumberAsync(long number)
         {
-            var client = new WebClient();
+            var result = await Task.Run(() =>
+                {
+                    var i = 2;
 
-            Console.WriteLine("Request started at: {0}", DateTime.Now.ToString("O"));
-            
-            var result = await client.DownloadStringTaskAsync(new Uri("http://www.mindassist.net/todo/hello"));
-            
-            Console.WriteLine("Request finished at {0}", DateTime.Now.ToString("O"));
-            Console.WriteLine("{0}Web-Content from mindassist: {1}", Environment.NewLine, result);
+                    if (number == 2)
+                    {
+                        return true;
+                    }
+
+                    while (i < number)
+                    {
+                        if (number % i == 0)
+                        {
+                            return false;
+                        }
+                   
+                        i++;
+                    }
+
+                    return true;
+                });
+
+            Console.WriteLine("{0} is prime: {1}", number, result);
         }
     }
 }
